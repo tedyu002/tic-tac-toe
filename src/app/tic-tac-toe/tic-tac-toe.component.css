@@ -1,0 +1,22 @@
+div {
+  margin: 0px;
+  padding: 0px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 50vmin;
+  height: 50vmin;
+}
+
+.block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px;
+  border-style: solid;
+  width: 100%;
+  height: 100%;
+}

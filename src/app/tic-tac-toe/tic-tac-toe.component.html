@@ -1,0 +1,24 @@
+<button (click)="start()" [disabled]="!canStart()">Start</button>
+<button (click)="reset()" [disabled]="!canReset()">Reset</button>
+
+<div class="layout">
+  <div class="block" *ngFor="let block of blocks; index as i"
+    (click)="userAction(i)"
+    (mouseenter)="blockEnter(block)"
+    (mouseleave)="blockLeave(block)"
+  >
+    <div *ngIf="!(block.setBy === null)">
+      <img *ngIf="players[0] === block.setBy" src="assets/circle.svg">
+      <img *ngIf="players[1] === block.setBy" src="assets/cross.svg">
+    </div>
+    <div *ngIf="!block.setBy && isEnter(block)">
+      <img *ngIf="players[0] === currentPlayer" src="assets/circle.svg">
+      <img *ngIf="players[1] === currentPlayer" src="assets/cross.svg">
+    </div>
+  </div>
+</div>
+
+<div *ngFor="let player of players">
+  <img [src]="player === players[0] ? 'assets/circle.svg': 'assets/cross.svg'"> {{player.remains / 1000}}
+  <span *ngIf="player === wonPlayer">Won</span>
+</div>
