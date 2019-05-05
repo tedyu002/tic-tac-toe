@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Block } from '../block';
 import { Player } from '../player';
 import { TicTacToeService } from '../tic-tac-toe.service';
@@ -34,7 +34,23 @@ export class TicTacToeComponent implements OnInit {
   }
 
   userAction(blockIdx: number) {
-    this.ticTacToeService.play(blockIdx);
+    if (this.ticTacToeService.isGameStart()) {
+      if (!this.ticTacToeService.isGameEnds()) {
+        this.ticTacToeService.play(blockIdx);
+
+        if (this.ticTacToeService.isGameEnds()) {
+          if (this.wonPlayer === this.players[0]) {
+            alert("Player 1 Win");
+          }
+          else if (this.wonPlayer === this.players[1]) {
+            alert("Player 2 Win");
+          }
+          else {
+            alert("Draw");
+          }
+        }
+      }
+    }
   }
 
   start(): void {
