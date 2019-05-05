@@ -7,22 +7,18 @@
     (mouseenter)="blockEnter(block)"
     (mouseleave)="blockLeave(block)"
   >
-    <div *ngIf="!(block.setBy === null)">
-      <img *ngIf="players[0] === block.setBy" src="assets/circle.svg">
-      <img *ngIf="players[1] === block.setBy" src="assets/cross.svg">
-    </div>
-    <div *ngIf="!block.setBy && isEnter(block)">
-      <img *ngIf="players[0] === currentPlayer" src="assets/circle.svg">
-      <img *ngIf="players[1] === currentPlayer" src="assets/cross.svg">
-    </div>
+    <img *ngIf="players[0] === block.setBy || (!block.setBy && isEnter(block) && currentPlayer === players[0])" src="assets/circle.svg">
+    <img *ngIf="players[1] === block.setBy || (!block.setBy && isEnter(block) && currentPlayer === players[1]) " src="assets/cross.svg">
   </div>
 </div>
 
-<div>
-  Current Player: <img [src]="currentPlayer === players[0] ? 'assets/circle.svg': 'assets/cross.svg'">
-</div>
+<div class="info">
+  <div>
+    Current Player: <img [src]="currentPlayer === players[0] ? 'assets/circle.svg': 'assets/cross.svg'">
+  </div>
 
-<div *ngFor="let player of players">
-  <img [src]="player === players[0] ? 'assets/circle.svg': 'assets/cross.svg'"> {{player.remains / 1000}}
-  <span *ngIf="player === wonPlayer">Won</span>
+  <div *ngFor="let player of players">
+    <img [src]="player === players[0] ? 'assets/circle.svg': 'assets/cross.svg'"> {{player.remains / 1000}}
+    <span *ngIf="player === wonPlayer">Won</span>
+  </div>
 </div>
