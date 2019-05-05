@@ -1,21 +1,36 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Block } from '../block';
 import { Player } from '../player';
-import { timer } from 'rxjs';
+import { timer, Subscription } from 'rxjs';
 import { TicTacToeService } from '../tic-tac-toe.service';
 
 @Component({
   selector: 'app-tic-tac-toe',
   templateUrl: './tic-tac-toe.component.html',
-  styleUrls: ['./tic-tac-toe.component.css']
+  styleUrls: ['./tic-tac-toe.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TicTacToeComponent implements OnInit {
 
   mouseAt: Block;
+  ticTacToeServiceTimeChagne: Subscription;
 
-  constructor(private ticTacToeService: TicTacToeService) { }
+  constructor(
+    private ticTacToeService: TicTacToeService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
+  }
 
   ngOnInit() {
+    this.ticTacToeServiceTimeChagne = this.ticTacToeService.timeChangeEventEmitter.subscribe(
+      () => {
+        this.changeDetectorRef.markForCheck();
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.ticTacToeServiceTimeChagne.unsubscribe();
   }
 
   get blocks(): Block[] {

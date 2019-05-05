@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { timer } from 'rxjs';
 import { Block } from './block';
 import { Player } from './player';
@@ -20,13 +20,17 @@ export class TicTacToeService {
   startTime: number;
   tick: any;
 
+  timeChangeEventEmitter: EventEmitter<number>;
+
   constructor() { 
     this.gameReset();
+    this.timeChangeEventEmitter = new EventEmitter<any>();
 
-    this.tick = timer(1, 10).subscribe(
+    this.tick = timer(0, 1000 / 60).subscribe(
       (val) => {
         if (this.isGameStart() && !this.isGameEnds()) {
           this.applyTime();
+          this.timeChangeEventEmitter.emit(null);
         }
       }
     );
