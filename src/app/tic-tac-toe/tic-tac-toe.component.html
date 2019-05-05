@@ -18,6 +18,10 @@
   </div>
 </div>
 
+<div>
+  Current Player: <img [src]="currentPlayer === players[0] ? 'assets/circle.svg': 'assets/cross.svg'">
+</div>
+
 <div *ngFor="let player of players">
   <img [src]="player === players[0] ? 'assets/circle.svg': 'assets/cross.svg'"> {{player.remains / 1000}}
   <span *ngIf="player === wonPlayer">Won</span>

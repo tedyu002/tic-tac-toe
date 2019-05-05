@@ -52,10 +52,10 @@ export class TicTacToeComponent implements OnInit {
       () => {
         subscript.unsubscribe();
         if (this.wonPlayer === this.players[0]) {
-          alert("Player 1 Win");
+          alert("Player ◯  Win");
         }
         else if (this.wonPlayer === this.players[1]) {
-          alert("Player 2 Win");
+          alert("Player ✖ Win");
         }
         else {
           alert("Draw");
