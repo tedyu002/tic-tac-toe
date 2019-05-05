@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Block } from '../block';
 import { Player } from '../player';
+import { timer } from 'rxjs';
 import { TicTacToeService } from '../tic-tac-toe.service';
 
 @Component({
@@ -39,21 +40,44 @@ export class TicTacToeComponent implements OnInit {
         this.ticTacToeService.play(blockIdx);
 
         if (this.ticTacToeService.isGameEnds()) {
-          if (this.wonPlayer === this.players[0]) {
-            alert("Player 1 Win");
-          }
-          else if (this.wonPlayer === this.players[1]) {
-            alert("Player 2 Win");
-          }
-          else {
-            alert("Draw");
-          }
+          this.showResult();
         }
       }
     }
   }
 
+  private showResult(): void {
+    const showTimer = timer(100);
+    const subscript = showTimer.subscribe(
+      () => {
+        subscript.unsubscribe();
+        if (this.wonPlayer === this.players[0]) {
+          alert("Player 1 Win");
+        }
+        else if (this.wonPlayer === this.players[1]) {
+          alert("Player 2 Win");
+        }
+        else {
+          alert("Draw");
+        }
+      }
+    );
+  }
+
+  timeUpShowed: boolean = false;
+  ngDoCheck() {
+    if (!this.timeUpShowed) {
+      if (this.isGameEnds()) {
+        if (this.ticTacToeService.isTimeup()) {
+          this.showResult();
+        }
+        this.timeUpShowed = true;
+      }
+    }
+  }
+
   start(): void {
+    this.timeUpShowed = false;
     this.ticTacToeService.gameStart();
   }
 
@@ -62,6 +86,7 @@ export class TicTacToeComponent implements OnInit {
   }
 
   reset(): void {
+    this.timeUpShowed = false;
     this.ticTacToeService.gameReset();
   }
 
