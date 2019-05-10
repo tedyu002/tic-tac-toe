@@ -4,33 +4,20 @@ import { Player } from '../player';
 import { timer, Subscription } from 'rxjs';
 import { TicTacToeService } from '../tic-tac-toe.service';
 
-@Component({
-  selector: 'app-tic-tac-toe',
-  templateUrl: './tic-tac-toe.component.html',
-  styleUrls: ['./tic-tac-toe.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
-})
-export class TicTacToeComponent implements OnInit {
-
+class TicTacToeComponentBase implements OnInit {
   mouseAt: Block;
   ticTacToeServiceTimeChagne: Subscription;
 
   constructor(
-    private ticTacToeService: TicTacToeService,
-    private changeDetectorRef: ChangeDetectorRef
+    protected ticTacToeService: TicTacToeService,
+    protected changeDetectorRef: ChangeDetectorRef
   ) {
   }
 
   ngOnInit() {
-    this.ticTacToeServiceTimeChagne = this.ticTacToeService.timeChangeEventEmitter.subscribe(
-      () => {
-        this.changeDetectorRef.markForCheck();
-      }
-    );
   }
 
   ngOnDestroy() {
-    this.ticTacToeServiceTimeChagne.unsubscribe();
   }
 
   get blocks(): Block[] {
@@ -127,5 +114,68 @@ export class TicTacToeComponent implements OnInit {
 
   isEnter(block: Block): boolean {
     return block === this.mouseAt;
+  }
+}
+
+
+@Component({
+  selector: 'app-tic-tac-toe-default',
+  templateUrl: './tic-tac-toe.component.html',
+  styleUrls: ['./tic-tac-toe.component.css'],
+  providers: [TicTacToeService]
+})
+export class TicTacToeComponentDefault extends TicTacToeComponentBase {
+  constructor(
+    ticTacToeService: TicTacToeService,
+    changeDetectorRef: ChangeDetectorRef
+  ) {
+    super(ticTacToeService, changeDetectorRef);
+  }
+}
+
+@Component({
+  selector: 'app-tic-tac-toe-onpush',
+  templateUrl: './tic-tac-toe.component.html',
+  styleUrls: ['./tic-tac-toe.component.css'],
+  providers: [TicTacToeService],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class TicTacToeComponentOnPush extends TicTacToeComponentBase {
+  constructor(
+    ticTacToeService: TicTacToeService,
+    changeDetectorRef: ChangeDetectorRef
+  ) {
+    super(ticTacToeService, changeDetectorRef);
+  }
+}
+
+@Component({
+  selector: 'app-tic-tac-toe-onpush-check',
+  templateUrl: './tic-tac-toe.component.html',
+  styleUrls: ['./tic-tac-toe.component.css'],
+  providers: [TicTacToeService],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class TicTacToeComponentOnPushCheck extends TicTacToeComponentBase {
+  constructor(
+    ticTacToeService: TicTacToeService,
+    changeDetectorRef: ChangeDetectorRef
+  ) {
+    super(ticTacToeService, changeDetectorRef);
+  }
+
+  ngOnInit() {
+    super.ngOnInit();
+    this.ticTacToeServiceTimeChagne = this.ticTacToeService.timeChangeEventEmitter.subscribe(
+      () => {
+        this.changeDetectorRef.markForCheck();
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.ticTacToeServiceTimeChagne.unsubscribe();
+
+    super.ngOnDestroy();
   }
 }
