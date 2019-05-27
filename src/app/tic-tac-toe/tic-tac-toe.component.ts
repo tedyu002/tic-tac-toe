@@ -6,7 +6,9 @@ import { TicTacToeService } from '../tic-tac-toe.service';
 
 class TicTacToeComponentBase implements OnInit {
   mouseAt: Block;
-  ticTacToeServiceTimeChagne: Subscription;
+
+  gameWonSubscript: Subscription;
+  gameDrawSubscript: Subscription;
 
   constructor(
     protected ticTacToeService: TicTacToeService,
@@ -15,9 +17,21 @@ class TicTacToeComponentBase implements OnInit {
   }
 
   ngOnInit() {
+    this.gameWonSubscript = this.ticTacToeService.gameWonEvent.subscribe(
+      () => {
+        this.showResult();
+      }
+    );
+    this.gameDrawSubscript = this.ticTacToeService.gameDrawEvent.subscribe(
+      () => {
+        this.showResult();
+      }
+    );
   }
 
   ngOnDestroy() {
+    this.gameWonSubscript.unsubscribe();
+    this.gameDrawSubscript.unsubscribe();
   }
 
   get blocks(): Block[] {
@@ -37,49 +51,22 @@ class TicTacToeComponentBase implements OnInit {
   }
 
   userAction(blockIdx: number) {
-    if (this.ticTacToeService.isGameStart()) {
-      if (!this.ticTacToeService.isGameEnds()) {
-        this.ticTacToeService.play(blockIdx);
-
-        if (this.ticTacToeService.isGameEnds()) {
-          this.showResult();
-        }
-      }
-    }
+    this.ticTacToeService.play(blockIdx);
   }
 
   private showResult(): void {
-    const showTimer = timer(100);
-    const subscript = showTimer.subscribe(
-      () => {
-        subscript.unsubscribe();
-        if (this.wonPlayer === this.players[0]) {
-          alert("Player ◯  Win");
-        }
-        else if (this.wonPlayer === this.players[1]) {
-          alert("Player ✖ Win");
-        }
-        else {
-          alert("Draw");
-        }
+      if (this.wonPlayer === this.players[0]) {
+        alert("Player ◯  Win");
       }
-    );
-  }
-
-  timeUpShowed: boolean = false;
-  ngDoCheck() {
-    if (!this.timeUpShowed) {
-      if (this.isGameEnds()) {
-        if (this.ticTacToeService.isTimeup()) {
-          this.showResult();
-        }
-        this.timeUpShowed = true;
+      else if (this.wonPlayer === this.players[1]) {
+        alert("Player ✖ Win");
       }
-    }
+      else {
+        alert("Draw");
+      }
   }
 
   start(): void {
-    this.timeUpShowed = false;
     this.ticTacToeService.gameStart();
   }
 
@@ -88,7 +75,6 @@ class TicTacToeComponentBase implements OnInit {
   }
 
   reset(): void {
-    this.timeUpShowed = false;
     this.ticTacToeService.gameReset();
   }
 
@@ -116,7 +102,6 @@ class TicTacToeComponentBase implements OnInit {
     return block === this.mouseAt;
   }
 }
-
 
 @Component({
   selector: 'app-tic-tac-toe-default',
@@ -157,6 +142,8 @@ export class TicTacToeComponentOnPush extends TicTacToeComponentBase {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TicTacToeComponentOnPushCheck extends TicTacToeComponentBase {
+  ticTacToeServiceTimeChagne: Subscription;
+
   constructor(
     ticTacToeService: TicTacToeService,
     changeDetectorRef: ChangeDetectorRef

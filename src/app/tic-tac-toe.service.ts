@@ -22,7 +22,13 @@ export class TicTacToeService {
 
   timeChangeEventEmitter: EventEmitter<number>;
 
-  constructor() { 
+  gameStartEvent: EventEmitter<any> = new EventEmitter<any>();
+  gameWonEvent: EventEmitter<any> = new EventEmitter<any>();
+  gameDrawEvent: EventEmitter<any> = new EventEmitter<any>();
+  gameResetEvent: EventEmitter<any> = new EventEmitter<any>();
+  userPlayEvent: EventEmitter<any> = new EventEmitter<any>();
+
+  constructor() {
     this.gameReset();
     this.timeChangeEventEmitter = new EventEmitter<any>();
 
@@ -42,6 +48,7 @@ export class TicTacToeService {
 
   gameStart(): void {
     this.startTime = (new Date()).getTime();
+    this.gameStartEvent.emit();
   }
 
   gameReset(): void {
@@ -68,6 +75,8 @@ export class TicTacToeService {
     }
 
     this.game_judge_slope = [0, 0];
+
+    this.gameResetEvent.emit();
   }
 
   play(blockIdx: number) {
@@ -95,8 +104,17 @@ export class TicTacToeService {
         this.game_judge_slope[1] += change;
       }
 
+      this.userPlayEvent.emit(this.currentPlayer);
+
       if (!this.isHit()) {
         this.round += 1;
+
+        if (this.isFull()) {
+          this.gameDrawEvent.emit();
+        }
+      }
+      else {
+        this.gameWonEvent.emit(this.wonPlayer);
       }
     }
   }
@@ -156,6 +174,7 @@ export class TicTacToeService {
 
     if (this.currentPlayer.remains < 0) {
       this.currentPlayer.remains = 0;
+      this.gameWonEvent.emit(this.wonPlayer);
       return false;
     }
     this.startTime = currentTime;
