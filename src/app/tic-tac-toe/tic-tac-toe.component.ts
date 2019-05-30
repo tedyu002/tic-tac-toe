@@ -54,6 +54,7 @@ class TicTacToeComponentBase implements OnInit {
   }
 
   private showResult(): void {
+    setTimeout(() => {
       if (this.wonPlayer === this.players[0]) {
         alert("Player ◯  Win");
       }
@@ -63,6 +64,7 @@ class TicTacToeComponentBase implements OnInit {
       else {
         alert("Draw");
       }
+    }, 0);
   }
 
   start(): void {
