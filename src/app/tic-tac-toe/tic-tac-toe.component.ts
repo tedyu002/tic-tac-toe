@@ -11,8 +11,7 @@ class TicTacToeComponentBase implements OnInit {
   gameDrawSubscript: Subscription;
 
   constructor(
-    protected ticTacToeService: TicTacToeService,
-    protected changeDetectorRef: ChangeDetectorRef
+    protected ticTacToeService: TicTacToeService
   ) {
   }
 
@@ -114,7 +113,7 @@ export class TicTacToeComponentDefault extends TicTacToeComponentBase {
     ticTacToeService: TicTacToeService,
     changeDetectorRef: ChangeDetectorRef
   ) {
-    super(ticTacToeService, changeDetectorRef);
+    super(ticTacToeService);
   }
 }
 
@@ -127,10 +126,9 @@ export class TicTacToeComponentDefault extends TicTacToeComponentBase {
 })
 export class TicTacToeComponentOnPush extends TicTacToeComponentBase {
   constructor(
-    ticTacToeService: TicTacToeService,
-    changeDetectorRef: ChangeDetectorRef
+    ticTacToeService: TicTacToeService
   ) {
-    super(ticTacToeService, changeDetectorRef);
+    super(ticTacToeService);
   }
 }
 
@@ -146,9 +144,9 @@ export class TicTacToeComponentOnPushCheck extends TicTacToeComponentBase {
 
   constructor(
     ticTacToeService: TicTacToeService,
-    changeDetectorRef: ChangeDetectorRef
+    protected changeDetectorRef: ChangeDetectorRef
   ) {
-    super(ticTacToeService, changeDetectorRef);
+    super(ticTacToeService);
   }
 
   ngOnInit() {
