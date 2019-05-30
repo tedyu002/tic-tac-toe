@@ -64,7 +64,7 @@ class TicTacToeComponentBase implements OnInit {
       else {
         alert("Draw");
       }
-    }, 0);
+    }, 1000 / 60);
   }
 
   start(): void {
@@ -117,6 +117,14 @@ export class TicTacToeComponentDefault extends TicTacToeComponentBase {
   ) {
     super(ticTacToeService);
   }
+
+  ngOnInit() {
+    super.ngOnInit();
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
+  }
 }
 
 @Component({
@@ -131,6 +139,13 @@ export class TicTacToeComponentOnPush extends TicTacToeComponentBase {
     ticTacToeService: TicTacToeService
   ) {
     super(ticTacToeService);
+  }
+  ngOnInit() {
+    super.ngOnInit();
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
   }
 }
 
